@@ -1,8 +1,10 @@
+import 'package:lipila_flutter/lipila_flutter.dart';
 import 'package:lipila_flutter/src/client/endpoints.dart';
 import 'package:lipila_flutter/src/client/http_client.dart';
 import 'package:lipila_flutter/src/exceptions/lipila_exception.dart';
-import 'package:lipila_flutter/src/models/collection_request.dart';
+import 'package:lipila_flutter/src/models/card_collection_request.dart';
 import 'package:lipila_flutter/src/models/collection_response.dart';
+import 'package:lipila_flutter/src/models/mobile_money_collection_request.dart';
 
 /// Service for collection operations
 class CollectionService {
@@ -19,7 +21,6 @@ class CollectionService {
   /// [amount] - Amount to collect
   /// [accountNumber] - Customer's phone number
   /// [currency] - Currency code (ZMW, USD, etc.)
-  /// [callbackUrl] - Optional callback URL for transaction updates
   ///
   /// Throws [ValidationException] if parameters are invalid.
   /// Throws [AuthException] if API key is invalid.
@@ -27,20 +28,28 @@ class CollectionService {
   Future<CollectionResponse> createCollection({
     required String referenceId,
     required double amount,
+    required String narration,
     required String accountNumber,
     required String currency,
-    String? callbackUrl,
+    String? email,
   }) async {
-    final request = CollectionRequest(
+
+    Validators.isValidZambianPhone(accountNumber);
+    Validators.validateAmount(amount);
+    Validators.validateCurrency(currency);
+    Validators.validateReferenceId(referenceId);
+
+    final request = MobileMoneyCollectionRequest(
       referenceId: referenceId,
       amount: amount,
+      narration: narration,
       accountNumber: accountNumber,
       currency: currency,
-      callbackUrl: callbackUrl,
+      email: email,
     );
 
     final response = await _httpClient.post(
-      Endpoints.collections,
+      Endpoints.mobileMoneyCollections,
       request.toJson(),
     );
 
@@ -51,30 +60,20 @@ class CollectionService {
   ///
   /// Initiates a card payment collection. Returns a checkout URL
   /// that the customer can use to complete the payment.
-  ///
-  /// [referenceId] - Unique reference for this transaction
-  /// [amount] - Amount to collect
-  /// [currency] - Currency code (ZMW, USD, etc.)
-  /// [callbackUrl] - Optional callback URL for transaction updates
-  ///
   /// Throws [ValidationException] if parameters are invalid.
   /// Throws [AuthException] if API key is invalid.
   /// Throws [ApiException] if the request fails.
   Future<CollectionResponse> createCardCollection({
-    required String referenceId,
-    required double amount,
-    required String currency,
-    String? callbackUrl,
+    required CollectionRequest collectionRequest,
+    required CustomerInfo customerInfo,
   }) async {
     final request = CardCollectionRequest(
-      referenceId: referenceId,
-      amount: amount,
-      currency: currency,
-      callbackUrl: callbackUrl,
+      collectionRequest: collectionRequest,
+      customerInfo: customerInfo,
     );
 
     final response = await _httpClient.post(
-      Endpoints.collections,
+      Endpoints.cardCollections,
       request.toJson(),
     );
 

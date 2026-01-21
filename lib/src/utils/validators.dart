@@ -36,7 +36,7 @@ class Validators {
   }
 
   /// Validate amount (must be positive)
-  static void validateAmount(double amount) {
+  static void validateAmount(num amount) {
     if (amount <= 0) {
       throw const ValidationException(
         'Amount must be greater than 0',
@@ -93,7 +93,7 @@ class Validators {
     }
 
     // Lipila API keys typically start with Lsk_ or Lpk_
-    if (!apiKey.startsWith('Lsk_') && !apiKey.startsWith('Lpk_')) {
+    if (!apiKey.startsWith('lsk_') && !apiKey.startsWith('lpk_')) {
       throw const ValidationException(
         'Invalid API key format',
         {'apiKey': 'Must start with Lsk_ or Lpk_'},

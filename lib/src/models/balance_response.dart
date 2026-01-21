@@ -1,45 +1,63 @@
-/// Response from balance API
 class BalanceResponse {
-  /// Creates a new balance response
-  const BalanceResponse({
-    required this.availableBalance,
-    required this.bookedBalance,
-    required this.currency,
-  });
+  BalanceResponse({
+      bool? success, 
+      String? message, 
+      Data? data,}){
+    _success = success;
+    _message = message;
+    _data = data;
+}
 
-  /// Create from JSON
-  factory BalanceResponse.fromJson(Map<String, dynamic> json) {
-    return BalanceResponse(
-      availableBalance: _parseDouble(json['availableBalance']),
-      bookedBalance: _parseDouble(json['bookedBalance']),
-      currency: json['currency'] as String? ?? 'ZMW',
-    );
+  BalanceResponse.fromJson(Map<String,dynamic> json) {
+    _success = json['success'] as bool?;
+    _message = json['message'] as String?;
+    _data = json['data'] != null ? Data.fromJson(json['data']) : null;
+  }
+  bool? _success;
+  String? _message;
+  Data? _data;
+BalanceResponse copyWith({  bool? success,
+  String? message,
+  Data? data,
+}) => BalanceResponse(  success: success ?? _success,
+  message: message ?? _message,
+  data: data ?? _data,
+);
+  bool? get success => _success;
+  String? get message => _message;
+  Data? get data => _data;
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['success'] = _success;
+    map['message'] = _message;
+    if (_data != null) {
+      map['data'] = _data?.toJson();
+    }
+    return map;
   }
 
-  /// Available balance
-  final double availableBalance;
+}
 
-  /// Booked balance
-  final double bookedBalance;
+class Data {
+  Data({
+      num? balance,}){
+    _balance = balance;
+}
 
-  /// Currency code
-  final String currency;
+  Data.fromJson(dynamic json) {
+    _balance = json['balance'] as num?;
+  }
+  num? _balance;
+Data copyWith({  num? balance,
+}) => Data(  balance: balance ?? _balance,
+);
+  num? get balance => _balance;
 
-  /// Convert to JSON
-  Map<String, dynamic> toJson() => {
-        'availableBalance': availableBalance,
-        'bookedBalance': bookedBalance,
-        'currency': currency,
-      };
-
-  static double _parseDouble(dynamic value) {
-    if (value is double) return value;
-    if (value is int) return value.toDouble();
-    if (value is String) return double.tryParse(value) ?? 0.0;
-    return 0.0;
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['balance'] = _balance;
+    return map;
   }
 
-  @override
-  String toString() =>
-      'BalanceResponse(available: $availableBalance, booked: $bookedBalance, currency: $currency)';
 }

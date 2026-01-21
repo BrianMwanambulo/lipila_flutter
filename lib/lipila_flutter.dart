@@ -14,11 +14,11 @@ export 'src/exceptions/lipila_exception.dart';
 // Models
 export 'src/models/balance_response.dart';
 export 'src/models/callback_payload.dart';
-export 'src/models/collection_request.dart';
 export 'src/models/collection_response.dart';
 export 'src/models/disbursement_request.dart';
 export 'src/models/disbursement_response.dart';
 export 'src/models/payment_type.dart';
 export 'src/models/transaction_status.dart';
+export 'src/utils/debug.dart';
 // Utils
 export 'src/utils/validators.dart';

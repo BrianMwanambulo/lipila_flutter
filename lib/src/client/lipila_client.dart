@@ -51,6 +51,7 @@ class LipilaClient {
     String apiKey, {
     Duration timeout = const Duration(seconds: 30),
     bool enableLogging = true,
+    String? callbackUrl,
     LogLevel logLevel = LogLevel.debug,
   }) {
     return LipilaClient(
@@ -58,6 +59,7 @@ class LipilaClient {
         apiKey: apiKey,
         environment: Environment.sandbox,
         timeout: timeout,
+        callbackUrl: callbackUrl,
         enableLogging: enableLogging,
         logLevel: logLevel,
       ),
@@ -73,6 +75,7 @@ class LipilaClient {
     String apiKey, {
     Duration timeout = const Duration(seconds: 30),
     bool enableLogging = false,
+    String ?  callbackUrl,
     LogLevel logLevel = LogLevel.error,
   }) {
     return LipilaClient(
@@ -80,6 +83,7 @@ class LipilaClient {
         apiKey: apiKey,
         environment: Environment.production,
         timeout: timeout,
+        callbackUrl: callbackUrl,
         enableLogging: enableLogging,
         logLevel: logLevel,
       ),

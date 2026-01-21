@@ -1,27 +1,28 @@
 /// Base exception for all Lipila SDK errors
 sealed class LipilaException implements Exception {
   /// Creates a new Lipila exception
-  const LipilaException(this.message, [this.statusCode]);
+  const LipilaException(this.message, [this.statusCode, this.errors]);
 
   /// Error message
   final String message;
 
   /// HTTP status code (if applicable)
   final int? statusCode;
+  final Map<String,dynamic>? errors;
 
   @override
   String toString() =>
-      'LipilaException: $message${statusCode != null ? ' (Status: $statusCode)' : ''}';
+      'LipilaException: $message${statusCode != null ? ' (Status: $statusCode) (Errors:$errors)' : ''}';
 }
 
 /// Exception for API-related errors
 class ApiException extends LipilaException {
   /// Creates a new API exception
-  const ApiException(super.message, [super.statusCode]);
+  const ApiException(super.message, [super.statusCode, super.errors]);
 
   @override
   String toString() =>
-      'ApiException: $message${statusCode != null ? ' (Status: $statusCode)' : ''}';
+      'ApiException: $message${statusCode != null ? ' (Status: $statusCode) (Errors:$errors)' : ''}';
 }
 
 /// Exception for authentication errors

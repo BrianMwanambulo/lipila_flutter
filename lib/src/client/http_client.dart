@@ -24,9 +24,10 @@ class HttpClient {
 
   /// Get request headers
   Map<String, String> get _headers => {
-        'Authorization': 'Bearer ${config.apiKey}',
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
+        'x-api-key': config.apiKey,
+        if (config.callbackUrl != null) 'callbackUrl': config.callbackUrl!,
+        'accept': 'application/json',
+        'content-type': 'application/json',
       };
 
   /// Make a GET request
@@ -36,8 +37,11 @@ class HttpClient {
     logger.logRequest('GET', url.toString(), null);
 
     try {
+      final headers = Map<String, String>.from(_headers)
+      ..remove('content-type');
+
       final response =
-          await _client.get(url, headers: _headers).timeout(config.timeout);
+          await _client.get(url, headers: headers).timeout(config.timeout);
 
       return _handleResponse(response);
     } on io.SocketException catch (e) {
@@ -61,6 +65,7 @@ class HttpClient {
 
     logger.logRequest('POST', url.toString(), body);
 
+
     try {
       final response = await _client
           .post(
@@ -79,6 +84,11 @@ class HttpClient {
       throw const TimeoutException('Request timed out');
     } catch (e) {
       logger.logError('Unexpected error', e);
+      if(e is ApiException){
+        if(e.statusCode == 500){
+          throw ApiException('Internal Server Error ', e.statusCode);
+        }
+      }
       rethrow;
     }
   }

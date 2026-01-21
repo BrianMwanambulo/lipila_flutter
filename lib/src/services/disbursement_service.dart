@@ -1,6 +1,7 @@
 import 'package:lipila_flutter/src/client/endpoints.dart';
 import 'package:lipila_flutter/src/client/http_client.dart';
 import 'package:lipila_flutter/src/exceptions/lipila_exception.dart';
+import 'package:lipila_flutter/src/models/bank_disbursement_request.dart';
 import 'package:lipila_flutter/src/models/disbursement_request.dart';
 import 'package:lipila_flutter/src/models/disbursement_response.dart';
 
@@ -39,11 +40,10 @@ class DisbursementService {
       accountNumber: accountNumber,
       currency: currency,
       narration: narration,
-      callbackUrl: callbackUrl,
     );
 
     final response = await _httpClient.post(
-      Endpoints.disbursements,
+      Endpoints.mobileMoneyDisbursements,
       request.toJson(),
     );
 
@@ -94,9 +94,7 @@ class DisbursementService {
       lastName: lastName,
       accountHolderName: accountHolderName,
       phoneNumber: phoneNumber,
-      email: email,
       narration: narration,
-      callbackUrl: callbackUrl,
     );
 
     final response = await _httpClient.post(

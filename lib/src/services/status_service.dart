@@ -20,7 +20,7 @@ class StatusService {
   /// Throws [ApiException] if the request fails.
   Future<TransactionStatus> checkCollectionStatus(String referenceId) async {
     final response = await _httpClient.get(
-      '${Endpoints.collectionStatus}/$referenceId',
+      '${Endpoints.collectionStatus}?referenceId=$referenceId',
     );
     return TransactionStatus.fromJson(response);
   }
@@ -35,7 +35,7 @@ class StatusService {
   /// Throws [ApiException] if the request fails.
   Future<TransactionStatus> checkDisbursementStatus(String referenceId) async {
     final response = await _httpClient.get(
-      '${Endpoints.disbursementStatus}/$referenceId',
+      '${Endpoints.disbursementStatus}?referenceId=$referenceId',
     );
     return TransactionStatus.fromJson(response);
   }

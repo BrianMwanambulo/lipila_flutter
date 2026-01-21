@@ -8,6 +8,7 @@ class LipilaConfig {
     required this.environment,
     this.timeout = const Duration(seconds: 30),
     this.enableLogging = false,
+    this.callbackUrl,
     this.logLevel = LogLevel.info,
   });
 
@@ -28,6 +29,9 @@ class LipilaConfig {
 
   /// Base URL for API requests
   String get baseUrl => environment.baseUrl;
+
+  /// callback URL for redirects
+  final String? callbackUrl;
 }
 
 /// Log levels for SDK operations

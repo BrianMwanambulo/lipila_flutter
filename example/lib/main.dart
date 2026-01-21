@@ -34,10 +34,11 @@ class _LipilaDemoState extends State<LipilaDemo> {
   bool _isLoading = false;
 
   // Controllers
-  final _apiKeyController = TextEditingController(text: 'Lsk_your_sandbox_key');
+  final _apiKeyController = TextEditingController(text: 'lsk_your_sandbox_key');
   final _amountController = TextEditingController(text: '100');
   final _phoneController = TextEditingController(text: '260977123456');
   final _referenceController = TextEditingController();
+  final _callbackUrlController = TextEditingController();
 
   @override
   void initState() {
@@ -45,10 +46,12 @@ class _LipilaDemoState extends State<LipilaDemo> {
     _initClient();
   }
 
-  void _initClient() {
+  void _initClient({String? webhookUrl}) {
     _client = LipilaClient.sandbox(
       _apiKeyController.text,
       enableLogging: true,
+      callbackUrl:webhookUrl,
+
       logLevel: LogLevel.debug,
     );
   }
@@ -66,8 +69,7 @@ class _LipilaDemoState extends State<LipilaDemo> {
             '''
 ✅ Balance Retrieved Successfully!
 
-Available Balance: ${balance.availableBalance} ${balance.currency}
-Booked Balance: ${balance.bookedBalance} ${balance.currency}
+Available Balance: ${balance.data?.balance} ZMW
 ''';
       });
     } on AuthException catch (e) {
@@ -103,7 +105,9 @@ Booked Balance: ${balance.bookedBalance} ${balance.currency}
       final collection = await _client.collections.createCollection(
         referenceId: reference,
         amount: amount,
+        narration: 'Test collection from Flutter SDK',
         accountNumber: phone,
+        email: "email@example.com",
         currency: 'ZMW',
       );
 
@@ -218,10 +222,6 @@ Amount: ${status.amount} ${status.currency ?? 'ZMW'}
 Account: ${status.accountNumber}
 Payment Type: ${status.paymentType}
 ${status.message != null ? 'Message: ${status.message}' : ''}
-
-Is Successful: ${status.isSuccessful}
-Is Pending: ${status.isPending}
-Is Failed: ${status.isFailed}
 ''';
       });
     } catch (e) {
@@ -254,6 +254,20 @@ Is Failed: ${status.isFailed}
                 prefixIcon: Icon(Icons.key),
               ),
               onChanged: (_) => _initClient(),
+            ),
+            const SizedBox(height: 16),
+
+            // Callback URL Input
+            TextField(
+              controller: _callbackUrlController,
+              onChanged: (_) => _initClient(
+                webhookUrl:  _callbackUrlController.text.isEmpty ? null : _callbackUrlController.text,
+              ),
+              decoration: const InputDecoration(
+                labelText: 'Callback URL (optional)',
+                border: OutlineInputBorder(),
+                prefixIcon: Icon(Icons.link),
+              ),
             ),
             const SizedBox(height: 16),
 

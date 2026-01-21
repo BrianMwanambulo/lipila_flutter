@@ -1,119 +1,118 @@
-/// Transaction status enumeration
-enum TransactionStatusEnum {
-  /// Transaction was successful
-  successful('Successful'),
-
-  /// Transaction is pending
-  pending('Pending'),
-
-  /// Transaction failed
-  failed('Failed'),
-
-  /// Transaction was cancelled
-  cancelled('Cancelled');
-
-  const TransactionStatusEnum(this.value);
-
-  /// String value
-  final String value;
-
-  /// Create from string
-  static TransactionStatusEnum fromString(String value) {
-    return TransactionStatusEnum.values.firstWhere(
-      (status) => status.value.toLowerCase() == value.toLowerCase(),
-      orElse: () => TransactionStatusEnum.pending,
-    );
-  }
-
-  @override
-  String toString() => value;
-}
-
-/// Transaction status response
 class TransactionStatus {
-  /// Creates a new transaction status
-  const TransactionStatus({
-    required this.referenceId,
-    required this.status,
-    required this.amount,
-    required this.accountNumber,
-    required this.paymentType,
-    this.message,
-    this.currency,
-    this.createdAt,
-  });
-
-  /// Create from JSON
-  factory TransactionStatus.fromJson(Map<String, dynamic> json) {
-    return TransactionStatus(
-      referenceId: json['referenceId'] as String? ?? '',
-      status: TransactionStatusEnum.fromString(
-        json['status'] as String? ?? 'Pending',
-      ),
-      amount: _parseDouble(json['amount']),
-      accountNumber: json['accountNumber'] as String? ?? '',
-      paymentType: json['paymentType'] as String? ?? '',
-      message: json['message'] as String?,
-      currency: json['currency'] as String?,
-      createdAt: json['createdAt'] != null
-          ? DateTime.tryParse(json['createdAt'] as String)
-          : null,
-    );
+  TransactionStatus({
+    String? referenceId,
+    String? currency,
+    num? amount,
+    String? accountNumber,
+    String? status,
+    String? paymentType,
+    String? type,
+    String? ipAddress,
+    String? identifier,
+    String? externalId,
+    String? message,
+  }) {
+    _referenceId = referenceId;
+    _currency = currency;
+    _amount = amount;
+    _accountNumber = accountNumber;
+    _status = status;
+    _paymentType = paymentType;
+    _type = type;
+    _ipAddress = ipAddress;
+    _identifier = identifier;
+    _externalId = externalId;
+    _message = message;
   }
 
-  /// Reference ID
-  final String referenceId;
-
-  /// Transaction status
-  final TransactionStatusEnum status;
-
-  /// Transaction amount
-  final double amount;
-
-  /// Account number
-  final String accountNumber;
-
-  /// Payment type
-  final String paymentType;
-
-  /// Status message
-  final String? message;
-
-  /// Currency code
-  final String? currency;
-
-  /// Creation timestamp
-  final DateTime? createdAt;
-
-  /// Check if transaction is successful
-  bool get isSuccessful => status == TransactionStatusEnum.successful;
-
-  /// Check if transaction is pending
-  bool get isPending => status == TransactionStatusEnum.pending;
-
-  /// Check if transaction failed
-  bool get isFailed => status == TransactionStatusEnum.failed;
-
-  /// Convert to JSON
-  Map<String, dynamic> toJson() => {
-        'referenceId': referenceId,
-        'status': status.value,
-        'amount': amount,
-        'accountNumber': accountNumber,
-        'paymentType': paymentType,
-        if (message != null) 'message': message,
-        if (currency != null) 'currency': currency,
-        if (createdAt != null) 'createdAt': createdAt!.toIso8601String(),
-      };
-
-  static double _parseDouble(dynamic value) {
-    if (value is double) return value;
-    if (value is int) return value.toDouble();
-    if (value is String) return double.tryParse(value) ?? 0.0;
-    return 0.0;
+  TransactionStatus.fromJson(Map<String, dynamic> json) {
+    _referenceId = json['referenceId'] as String?;
+    _currency = json['currency'] as String?;
+    _amount = json['amount'] as num?;
+    _accountNumber = json['accountNumber'] as String?;
+    _status = json['status'] as String?;
+    _paymentType = json['paymentType'] as String?;
+    _type = json['type'] as String?;
+    _ipAddress = json['ipAddress'] as String?;
+    _identifier = json['identifier'] as String?;
+    _externalId = json['externalId'] as String?;
+    _message = json['message'] as String?;
   }
 
-  @override
-  String toString() =>
-      'TransactionStatus(ref: $referenceId, status: ${status.value}, amount: $amount)';
+  String? _referenceId;
+  String? _currency;
+  num? _amount;
+  String? _accountNumber;
+  String? _status;
+  String? _paymentType;
+  String? _type;
+  String? _ipAddress;
+  String? _identifier;
+  String? _externalId;
+  String? _message;
+
+  TransactionStatus copyWith({
+    String? referenceId,
+    String? currency,
+    num? amount,
+    String? accountNumber,
+    String? status,
+    String? paymentType,
+    String? type,
+    String? ipAddress,
+    String? identifier,
+    String? externalId,
+    String? message,
+  }) =>
+      TransactionStatus(
+        referenceId: referenceId ?? _referenceId,
+        currency: currency ?? _currency,
+        amount: amount ?? _amount,
+        accountNumber: accountNumber ?? _accountNumber,
+        status: status ?? _status,
+        paymentType: paymentType ?? _paymentType,
+        type: type ?? _type,
+        ipAddress: ipAddress ?? _ipAddress,
+        identifier: identifier ?? _identifier,
+        externalId: externalId ?? _externalId,
+        message: message ?? _message,
+      );
+
+  String? get referenceId => _referenceId;
+
+  String? get currency => _currency;
+
+  num? get amount => _amount;
+
+  String? get accountNumber => _accountNumber;
+
+  String? get status => _status;
+
+  String? get paymentType => _paymentType;
+
+  String? get type => _type;
+
+  String? get ipAddress => _ipAddress;
+
+  String? get identifier => _identifier;
+
+  String? get externalId => _externalId;
+
+  String? get message => _message;
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['referenceId'] = _referenceId;
+    map['currency'] = _currency;
+    map['amount'] = _amount;
+    map['accountNumber'] = _accountNumber;
+    map['status'] = _status;
+    map['paymentType'] = _paymentType;
+    map['type'] = _type;
+    map['ipAddress'] = _ipAddress;
+    map['identifier'] = _identifier;
+    map['externalId'] = _externalId;
+    map['message'] = _message;
+    return map;
+  }
 }

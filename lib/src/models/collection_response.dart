@@ -1,68 +1,102 @@
-import 'payment_type.dart';
-
-/// Response from collection API
 class CollectionResponse {
-  /// Creates a new collection response
-  const CollectionResponse({
-    required this.referenceId,
-    required this.status,
-    required this.identifier,
-    required this.paymentType,
-    required this.createdAt,
-    this.checkoutUrl,
-    this.message,
-  });
+  CollectionResponse({
+      String? currency, 
+      num? amount, 
+      String? accountNumber, 
+      String? status, 
+      String? paymentType, 
+      String? ipAddress, 
+      String? cardRedirectionUrl,
+      String? createdAt, 
+      String? referenceId, 
+      String? identifier, 
+      String? message,}){
+    _currency = currency;
+    _amount = amount;
+    _accountNumber = accountNumber;
+    _status = status;
+    _paymentType = paymentType;
+    _ipAddress = ipAddress;
+    _cardRedirectionUrl = cardRedirectionUrl;
+    _createdAt = createdAt;
+    _referenceId = referenceId;
+    _identifier = identifier;
+    _message = message;
+}
 
-  /// Create from JSON
-  factory CollectionResponse.fromJson(Map<String, dynamic> json) {
-    return CollectionResponse(
-      referenceId: json['referenceId'] as String? ?? '',
-      status: json['status'] as String? ?? 'Pending',
-      identifier: json['identifier'] as String? ?? '',
-      paymentType: PaymentType.fromString(
-        json['paymentType'] as String? ?? 'Mobile',
-      ),
-      createdAt: json['createdAt'] != null
-          ? DateTime.tryParse(json['createdAt'] as String) ?? DateTime.now()
-          : DateTime.now(),
-      checkoutUrl: json['checkoutUrl'] as String?,
-      message: json['message'] as String?,
-    );
+  CollectionResponse.fromJson(dynamic json) {
+    _currency = json['currency'] as String?;
+    _amount = json['amount'] as num?;
+    _accountNumber = json['accountNumber'] as String?;
+    _status = json['status'] as String?;
+    _paymentType = json['paymentType'] as String?;
+    _ipAddress = json['ipAddress'] as String?;
+    _cardRedirectionUrl = json['cardRedirectionUrl'] as String?;
+    _createdAt = json['createdAt'] as String?;
+    _referenceId = json['referenceId'] as String?;
+    _identifier = json['identifier'] as String?;
+    _message = json['message'] as String?;
+  }
+  String? _currency;
+  num? _amount;
+  String? _accountNumber;
+  String? _status;
+  String? _paymentType;
+  String? _ipAddress;
+  String? _cardRedirectionUrl;
+  String? _createdAt;
+  String? _referenceId;
+  String? _identifier;
+  String? _message;
+CollectionResponse copyWith({  String? currency,
+  num? amount,
+  String? accountNumber,
+  String? status,
+  String? paymentType,
+  String? ipAddress,
+  String? cardRedirectionUrl,
+  String? createdAt,
+  String? referenceId,
+  String? identifier,
+  String? message,
+}) => CollectionResponse(  currency: currency ?? _currency,
+  amount: amount ?? _amount,
+  accountNumber: accountNumber ?? _accountNumber,
+  status: status ?? _status,
+  paymentType: paymentType ?? _paymentType,
+  ipAddress: ipAddress ?? _ipAddress,
+  cardRedirectionUrl: cardRedirectionUrl ?? _cardRedirectionUrl,
+  createdAt: createdAt ?? _createdAt,
+  referenceId: referenceId ?? _referenceId,
+  identifier: identifier ?? _identifier,
+  message: message ?? _message,
+);
+  String? get currency => _currency;
+  num? get amount => _amount;
+  String? get accountNumber => _accountNumber;
+  String? get status => _status;
+  String? get paymentType => _paymentType;
+  String? get ipAddress => _ipAddress;
+  String? get cardRedirectionUrl => _cardRedirectionUrl;
+  String? get createdAt => _createdAt;
+  String? get referenceId => _referenceId;
+  String? get identifier => _identifier;
+  String? get message => _message;
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['currency'] = _currency;
+    map['amount'] = _amount;
+    map['accountNumber'] = _accountNumber;
+    map['status'] = _status;
+    map['paymentType'] = _paymentType;
+    map['ipAddress'] = _ipAddress;
+    map['cardRedirectionUrl'] = _cardRedirectionUrl;
+    map['createdAt'] = _createdAt;
+    map['referenceId'] = _referenceId;
+    map['identifier'] = _identifier;
+    map['message'] = _message;
+    return map;
   }
 
-  /// Reference ID
-  final String referenceId;
-
-  /// Transaction status
-  final String status;
-
-  /// Transaction identifier
-  final String identifier;
-
-  /// Payment type
-  final PaymentType paymentType;
-
-  /// Creation timestamp
-  final DateTime createdAt;
-
-  /// Checkout URL (for card payments)
-  final String? checkoutUrl;
-
-  /// Response message
-  final String? message;
-
-  /// Convert to JSON
-  Map<String, dynamic> toJson() => {
-        'referenceId': referenceId,
-        'status': status,
-        'identifier': identifier,
-        'paymentType': paymentType.value,
-        'createdAt': createdAt.toIso8601String(),
-        if (checkoutUrl != null) 'checkoutUrl': checkoutUrl,
-        if (message != null) 'message': message,
-      };
-
-  @override
-  String toString() =>
-      'CollectionResponse(ref: $referenceId, status: $status, identifier: $identifier)';
 }

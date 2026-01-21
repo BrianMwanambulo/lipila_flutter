@@ -1,62 +1,127 @@
-import 'payment_type.dart';
-
-/// Response from disbursement API
 class DisbursementResponse {
-  /// Creates a new disbursement response
-  const DisbursementResponse({
-    required this.referenceId,
-    required this.status,
-    required this.identifier,
-    required this.paymentType,
-    required this.createdAt,
-    this.message,
-  });
-
-  /// Create from JSON
-  factory DisbursementResponse.fromJson(Map<String, dynamic> json) {
-    return DisbursementResponse(
-      referenceId: json['referenceId'] as String? ?? '',
-      status: json['status'] as String? ?? 'Pending',
-      identifier: json['identifier'] as String? ?? '',
-      paymentType: PaymentType.fromString(
-        json['paymentType'] as String? ?? 'Mobile',
-      ),
-      createdAt: json['createdAt'] != null
-          ? DateTime.tryParse(json['createdAt'] as String) ?? DateTime.now()
-          : DateTime.now(),
-      message: json['message'] as String?,
-    );
+  DisbursementResponse({
+    num? amount,
+    dynamic externalId,
+    String? narration,
+    String? ipAddress,
+    String? referenceId,
+    String? status,
+    String? currency,
+    String? type,
+    String? accountNumber,
+    String? paymentType,
+    String? createdAt,
+    String? identifier,
+  }) {
+    _amount = amount;
+    _externalId = externalId;
+    _narration = narration;
+    _ipAddress = ipAddress;
+    _referenceId = referenceId;
+    _status = status;
+    _currency = currency;
+    _type = type;
+    _accountNumber = accountNumber;
+    _paymentType = paymentType;
+    _createdAt = createdAt;
+    _identifier = identifier;
   }
 
-  /// Reference ID
-  final String referenceId;
+  DisbursementResponse.fromJson(dynamic json) {
+    _amount = json['amount'] as num?;
+    _externalId = json['externalId'] as String?;
+    _narration = json['narration'] as String?;
+    _ipAddress = json['ipAddress'] as String?;
+    _referenceId = json['referenceId'] as String?;
+    _status = json['status'] as String?;
+    _currency = json['currency'] as String?;
+    _type = json['type'] as String?;
+    _accountNumber = json['accountNumber'] as String?;
+    _paymentType = json['paymentType'] as String?;
+    _createdAt = json['createdAt'] as String?;
+    _identifier = json['identifier'] as String?;
+  }
 
-  /// Transaction status
-  final String status;
+  num? _amount;
+  dynamic _externalId;
+  String? _narration;
+  String? _ipAddress;
+  String? _referenceId;
+  String? _status;
+  String? _currency;
+  String? _type;
+  String? _accountNumber;
+  String? _paymentType;
+  String? _createdAt;
+  String? _identifier;
 
-  /// Transaction identifier
-  final String identifier;
+  DisbursementResponse copyWith({
+    num? amount,
+    dynamic externalId,
+    String? narration,
+    String? ipAddress,
+    String? referenceId,
+    String? status,
+    String? currency,
+    String? type,
+    String? accountNumber,
+    String? paymentType,
+    String? createdAt,
+    String? identifier,
+  }) =>
+      DisbursementResponse(
+        amount: amount ?? _amount,
+        externalId: externalId ?? _externalId,
+        narration: narration ?? _narration,
+        ipAddress: ipAddress ?? _ipAddress,
+        referenceId: referenceId ?? _referenceId,
+        status: status ?? _status,
+        currency: currency ?? _currency,
+        type: type ?? _type,
+        accountNumber: accountNumber ?? _accountNumber,
+        paymentType: paymentType ?? _paymentType,
+        createdAt: createdAt ?? _createdAt,
+        identifier: identifier ?? _identifier,
+      );
 
-  /// Payment type
-  final PaymentType paymentType;
+  num? get amount => _amount;
 
-  /// Creation timestamp
-  final DateTime createdAt;
+  dynamic get externalId => _externalId;
 
-  /// Response message
-  final String? message;
+  String? get narration => _narration;
 
-  /// Convert to JSON
-  Map<String, dynamic> toJson() => {
-        'referenceId': referenceId,
-        'status': status,
-        'identifier': identifier,
-        'paymentType': paymentType.value,
-        'createdAt': createdAt.toIso8601String(),
-        if (message != null) 'message': message,
-      };
+  String? get ipAddress => _ipAddress;
 
-  @override
-  String toString() =>
-      'DisbursementResponse(ref: $referenceId, status: $status, identifier: $identifier)';
+  String? get referenceId => _referenceId;
+
+  String? get status => _status;
+
+  String? get currency => _currency;
+
+  String? get type => _type;
+
+  String? get accountNumber => _accountNumber;
+
+  String? get paymentType => _paymentType;
+
+  String? get createdAt => _createdAt;
+
+  String? get identifier => _identifier;
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['amount'] = _amount;
+    map['externalId'] = _externalId;
+    map['narration'] = _narration;
+    map['ipAddress'] = _ipAddress;
+    map['referenceId'] = _referenceId;
+    map['status'] = _status;
+    map['currency'] = _currency;
+    map['type'] = _type;
+    map['accountNumber'] = _accountNumber;
+    map['paymentType'] = _paymentType;
+    map['createdAt'] = _createdAt;
+    map['identifier'] = _identifier;
+    return map;
+  }
 }

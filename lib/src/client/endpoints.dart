@@ -3,15 +3,16 @@ class Endpoints {
   Endpoints._();
 
   // Balance
-  static const String balance = '/wallet/balance';
+  static const String balance = '/merchants/balance';
 
   // Collections
-  static const String collections = '/transactions/collection';
-  static const String collectionStatus = '/transactions/collection/status';
+  static const String cardCollections = '/collections/card';
+  static const String mobileMoneyCollections = '/collections/mobile-money';
+  static const String collectionStatus = '/collections/check-status';
 
   // Disbursements
-  static const String disbursements = '/transactions/disbursement';
-  static const String disbursementStatus = '/transactions/disbursement/status';
+  static const String mobileMoneyDisbursements = '/disbursements/mobile-money';
+  static const String disbursementStatus = '/disbursements/check-status';
 
   // Bank disbursements
   static const String bankDisbursements = '/transactions/bank-disbursement';
