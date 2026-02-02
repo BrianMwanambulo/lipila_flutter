@@ -1,6 +1,6 @@
 name: lipila_flutter
 description: Official Flutter SDK for Lipila payment gateway. Accept payments and make disbursements in Zambia.
-version: 1.0.0
+version: 1.0.2
 homepage: https://github.com/BrianMwanambulo/lipila_flutter
 repository: https://github.com/BrianMwanambulo/lipila_flutter.git
 issue_tracker: https://github.com/BrianMwanambulo/lipila_flutter/issues

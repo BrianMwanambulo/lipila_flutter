@@ -26,7 +26,7 @@ Add this to your package's `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  lipila_flutter: ^1.0.0
+  lipila_flutter: ^1.0.2
 ```
 
 Then run:
@@ -41,8 +41,8 @@ flutter pub get
 
 1. Sign up at [Lipila Dashboard](https://dashboard.lipila.io)
 2. Get your API key from the dashboard
-3. Use sandbox key (`Lsk_`) for testing
-4. Use production key (`Lpk_`) for live transactions
+3. Use sandbox key (`lsk_`) for testing
+4. Use production key (`lpk_`) for live transactions
 
 ### 2. Initialize the Client
 
@@ -50,10 +50,10 @@ flutter pub get
 import 'package:lipila_flutter/lipila_flutter.dart';
 
 // For testing (sandbox)
-final client = LipilaClient.sandbox('Lsk_your_sandbox_key');
+final client = LipilaClient.sandbox('lsk_your_sandbox_key');
 
 // For production
-final client = LipilaClient.production('Lpk_your_production_key');
+final client = LipilaClient.production('lpk_your_production_key');
 ```
 
 ## Usage Examples
@@ -64,7 +64,6 @@ final client = LipilaClient.production('Lpk_your_production_key');
 try {
   final balance = await client.balance.getBalance();
   print('Available: ${balance.availableBalance} ${balance.currency}');
-  print('Booked: ${balance.bookedBalance} ${balance.currency}');
 } on AuthException catch (e) {
   print('Authentication failed: ${e.message}');
 } on NetworkException catch (e) {
@@ -292,11 +291,11 @@ For testing, use the sandbox environment:
 
 ```dart
 // Use sandbox API key
-final client = LipilaClient.sandbox('Lsk_test_key');
+final client = LipilaClient.sandbox('lsk_test_key');
 
 // Enable detailed logging
 final client = LipilaClient.sandbox(
-  'Lsk_test_key',
+  'lsk_test_key',
   enableLogging: true,
   logLevel: LogLevel.debug,
 );
@@ -384,12 +383,12 @@ void dispose() {
 
 ## API Reference
 
-Full API documentation is available at [pub.dev/documentation/lipila_flutter](https://pub.dev/documentation/lipila_flutter/latest/)
+Full API documentation is available at [pub.dev/documentation/lipila_flutter](https://docs.lipila.dev/docs/)
 
 ## Support
 
 - 📧 Email: support@lipila.io
-- 📖 Documentation: https://docs.lipila.io
+- 📖 Documentation: https://docs.lipila.dev/docs
 - 💬 Issues: [GitHub Issues](https://github.com/yourusername/lipila-flutter/issues)
 
 ## Contributing
