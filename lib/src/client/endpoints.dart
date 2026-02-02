@@ -15,5 +15,5 @@ class Endpoints {
   static const String disbursementStatus = '/disbursements/check-status';
 
   // Bank disbursements
-  static const String bankDisbursements = '/transactions/bank-disbursement';
+  static const String bankDisbursements = '/disbursements/bank';
 }

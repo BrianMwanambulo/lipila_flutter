@@ -50,13 +50,20 @@ class _LipilaDemoState extends State<LipilaDemo> {
     _client = LipilaClient.sandbox(
       _apiKeyController.text,
       enableLogging: true,
-      callbackUrl:webhookUrl,
-
+      callbackUrl: webhookUrl,
       logLevel: LogLevel.debug,
     );
   }
 
   Future<void> _checkBalance() async {
+    if (_apiKeyController.text.isEmpty ||
+        !_apiKeyController.text.startsWith('lsk_') ||
+        _apiKeyController.text == "lsk_your_sandbox_key") {
+      setState(() {
+        _output = '❌ Please enter a valid API key';
+      });
+      return;
+    }
     setState(() {
       _isLoading = true;
       _output = 'Checking balance...';
@@ -90,6 +97,14 @@ Available Balance: ${balance.data?.balance} ZMW
   }
 
   Future<void> _createCollection() async {
+    if (_apiKeyController.text.isEmpty ||
+        !_apiKeyController.text.startsWith('lsk_') ||
+        _apiKeyController.text == "lsk_your_sandbox_key") {
+      setState(() {
+        _output = '❌ Please enter a valid API key';
+      });
+      return;
+    }
     final amount = double.tryParse(_amountController.text) ?? 0;
     final phone = _phoneController.text;
     final reference = _referenceController.text.isEmpty
@@ -148,6 +163,14 @@ ${e.errors.entries.map((e) => '${e.key}: ${e.value}').join('\n')}
   }
 
   Future<void> _createDisbursement() async {
+    if (_apiKeyController.text.isEmpty ||
+        !_apiKeyController.text.startsWith('lsk_') ||
+        _apiKeyController.text == "lsk_your_sandbox_key") {
+      setState(() {
+        _output = '❌ Please enter a valid API key';
+      });
+      return;
+    }
     final amount = double.tryParse(_amountController.text) ?? 0;
     final phone = _phoneController.text;
     final reference = _referenceController.text.isEmpty
@@ -189,7 +212,127 @@ Created: ${disbursement.createdAt}
     }
   }
 
+  Future<void> _createCardCollection() async {
+    if (_apiKeyController.text.isEmpty ||
+        !_apiKeyController.text.startsWith('lsk_') ||
+        _apiKeyController.text == "lsk_your_sandbox_key") {
+      setState(() {
+        _output = '❌ Please enter a valid API key';
+      });
+      return;
+    }
+    final amount = double.tryParse(_amountController.text) ?? 0;
+    final phone = _phoneController.text;
+    final reference = _referenceController.text.isEmpty
+        ? 'CARD-${DateTime.now().millisecondsSinceEpoch}'
+        : _referenceController.text;
+
+    setState(() {
+      _isLoading = true;
+      _output = 'Creating card collection...';
+    });
+
+    try {
+      final collection = await _client.collections.createCardCollection(
+        collectionRequest: CollectionRequest(
+          referenceId: reference,
+          amount: amount,
+          narration: 'Test card collection from Flutter SDK',
+          currency: 'ZMW',
+        ),
+        customerInfo: CustomerInfo(
+          firstName: 'Test',
+          lastName: 'User',
+          email: 'test@example.com',
+          phoneNumber: phone,
+          country: 'ZM',
+          city: 'Lusaka',
+        ),
+      );
+
+      setState(() {
+        _output =
+            '''
+✅ Card Collection Initiated!
+
+Reference ID: ${collection.referenceId}
+Status: ${collection.status}
+Payment Type: ${collection.paymentType}
+Redirect URL: ${collection.cardRedirectionUrl}
+''';
+      });
+    } catch (e) {
+      setState(() {
+        _output = '❌ Error:\n$e';
+      });
+    } finally {
+      setState(() => _isLoading = false);
+    }
+  }
+
+  Future<void> _createBankDisbursement() async {
+    if (_apiKeyController.text.isEmpty ||
+        !_apiKeyController.text.startsWith('lsk_') ||
+        _apiKeyController.text == "lsk_your_sandbox_key") {
+      setState(() {
+        _output = '❌ Please enter a valid API key';
+      });
+      return;
+    }
+    final amount = double.tryParse(_amountController.text) ?? 0;
+    final reference = _referenceController.text.isEmpty
+        ? 'BANK-PAYOUT-${DateTime.now().millisecondsSinceEpoch}'
+        : _referenceController.text;
+
+    setState(() {
+      _isLoading = true;
+      _output = 'Creating bank disbursement...';
+    });
+
+    try {
+      final disbursement = await _client.disbursements.createBankDisbursement(
+        referenceId: reference,
+        amount: amount,
+        accountNumber: '532346464756758674654744564646546464',
+        currency: 'ZMW',
+        swiftCode: 'ZNCOZMLU',
+        firstName: 'John',
+        lastName: 'Doe',
+        accountHolderName: 'John Doe',
+        phoneNumber: '260xxxxxxxxx',
+        narration: 'Settlement Payout',
+      );
+
+      setState(() {
+        _output =
+            '''
+✅ Bank Disbursement Created!
+
+Reference ID: ${disbursement.referenceId}
+Identifier: ${disbursement.identifier}
+Status: ${disbursement.status}
+Payment Type: ${disbursement.paymentType}
+Created: ${disbursement.createdAt}
+''';
+      });
+    } catch (e) {
+      setState(() {
+        _output = '❌ Error:\n$e';
+      });
+    } finally {
+      setState(() => _isLoading = false);
+    }
+  }
+
   Future<void> _checkStatus() async {
+    if (_apiKeyController.text.isEmpty ||
+        !_apiKeyController.text.startsWith('lsk_') ||
+        _apiKeyController.text == "lsk_your_sandbox_key") {
+      setState(() {
+        _output = '❌ Please enter a valid API key';
+      });
+      return;
+    }
     final reference = _referenceController.text;
     if (reference.isEmpty) {
       setState(() {
@@ -261,7 +404,9 @@ ${status.message != null ? 'Message: ${status.message}' : ''}
             TextField(
               controller: _callbackUrlController,
               onChanged: (_) => _initClient(
-                webhookUrl:  _callbackUrlController.text.isEmpty ? null : _callbackUrlController.text,
+                webhookUrl: _callbackUrlController.text.isEmpty
+                    ? null
+                    : _callbackUrlController.text,
               ),
               decoration: const InputDecoration(
                 labelText: 'Callback URL (optional)',
@@ -331,6 +476,24 @@ ${status.message != null ? 'Message: ${status.message}' : ''}
                   label: const Text('Create Disbursement'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.orange,
+                    foregroundColor: Colors.white,
+                  ),
+                ),
+                ElevatedButton.icon(
+                  onPressed: _isLoading ? null : _createCardCollection,
+                  icon: const Icon(Icons.credit_card),
+                  label: const Text('Card Payment'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.purple,
+                    foregroundColor: Colors.white,
+                  ),
+                ),
+                ElevatedButton.icon(
+                  onPressed: _isLoading ? null : _createBankDisbursement,
+                  icon: const Icon(Icons.account_balance),
+                  label: const Text('Bank Disbursement'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red,
                     foregroundColor: Colors.white,
                   ),
                 ),

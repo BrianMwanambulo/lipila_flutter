@@ -13,7 +13,9 @@ export 'src/config/lipila_config.dart';
 export 'src/exceptions/lipila_exception.dart';
 // Models
 export 'src/models/balance_response.dart';
+export 'src/models/bank_disbursement_request.dart';
 export 'src/models/callback_payload.dart';
+export 'src/models/card_collection_request.dart';
 export 'src/models/collection_response.dart';
 export 'src/models/disbursement_request.dart';
 export 'src/models/disbursement_response.dart';

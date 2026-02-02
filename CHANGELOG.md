@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.1] - 2026-02-02
+
+### Added
+- **Card Payments**: Support for card collection requests via `createCardCollection`
+- **Bank Disbursements**: Support for direct bank disbursements via `createBankDisbursement`
+- **Example App**: Added comprehensive examples for card payments and bank disbursements
+
+### Fixed
+- **Connectivity**: Resolved "Failed host lookup" issues on Android and macOS by adding required permissions
+- **Endpoints**: Corrected bank disbursement API endpoint path
+
 ## [1.0.0] - 2026-01-20
 
 ### Added
@@ -67,4 +78,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 [1.0.0]: https://github.com/yourusername/lipila-flutter/releases/tag/v1.0.0
 [0.0.1]: https://github.com/yourusername/lipila-flutter/releases/tag/v0.0.1
-

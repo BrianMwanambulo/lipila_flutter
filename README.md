@@ -112,17 +112,28 @@ try {
 ### Accept Card Payment
 
 ```dart
-final collection = await client.collections.createCardCollection(
-  referenceId: 'ORDER-123',
-  amount: 250.00,
-  currency: 'ZMW',
-  callbackUrl: 'https://myapp.com/webhook',
-);
+try {
+  final collection = await client.collections.createCardCollection(
+    collectionRequest: CollectionRequest(
+      referenceId: 'CARD-${DateTime.now().millisecondsSinceEpoch}',
+      amount: 150.00,
+      currency: 'ZMW',
+      narration: 'Card Payment Test',
+    ),
+    customerInfo: CustomerInfo(
+      firstName: 'John',
+      lastName: 'Doe',
+      email: 'john@example.com',
+      phoneNumber: '0977123456',
+      country: 'ZM',
+      city: 'Lusaka',
+    ),
+  );
 
-// Redirect user to checkout URL
-if (collection.checkoutUrl != null) {
-  // Open in browser or webview
-  print('Checkout URL: ${collection.checkoutUrl}');
+  print('Redirect URL: ${collection.cardRedirectionUrl}');
+  // Redirect user to: collection.cardRedirectionUrl
+} catch (e) {
+  print('Error: $e');
 }
 ```
 
@@ -152,22 +163,28 @@ try {
 }
 ```
 
-### Send Money (Bank Disbursement)
+### Send Bank Disbursement
 
 ```dart
-final disbursement = await client.disbursements.createBankDisbursement(
-  referenceId: 'BANK-PAYOUT-123',
-  amount: 1000.00,
-  accountNumber: '1234567890',
-  currency: 'ZMW',
-  swiftCode: 'ZANMZMLX',
-  firstName: 'John',
-  lastName: 'Doe',
-  accountHolderName: 'John Doe',
-  phoneNumber: '260977123456',
-  email: 'john@example.com',
-  narration: 'Contractor payment',
-);
+try {
+  final disbursement = await client.disbursements.createBankDisbursement(
+    referenceId: 'PAYOUT-${DateTime.now().millisecondsSinceEpoch}',
+    amount: 500.00,
+    currency: 'ZMW',
+    accountNumber: '1234567890',
+    swiftCode: 'ZNCOZMLU', // Bank SWIFT code
+    firstName: 'Jane',
+    lastName: 'Doe',
+    accountHolderName: 'Jane Doe',
+    phoneNumber: '260977000000',
+    narration: 'Salary Payment',
+  );
+
+  print('Disbursement initiated: ${disbursement.referenceId}');
+  print('Status: ${disbursement.status}');
+} catch (e) {
+  print('Error: $e');
+}
 ```
 
 ### Handle Webhooks
